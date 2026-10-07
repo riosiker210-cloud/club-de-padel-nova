@@ -9,11 +9,11 @@ A Club Pàdel Nova volem fer que reservar una pista de pàdel sigui fàcil, ràp
 ## 3 pistes disponibles
 Tria entre les nostres tres pistes:
 
-· Pista Iker
+- Pista Iker
 
-· Pista Izan
+- Pista Izan
 
-· Pista Jairo
+- Pista Jairo
 
 Cada pista té una durada de reserva de 60 minuts i un preu de 20 €.
 ## Reserva quan vulguis

@@ -1,5 +1,5 @@
 # CLUB PÀDEL NOVA	
-![Sample chart](/docs/Images.png/image.png) 
+![Sample chart](img/image.png) 
 
 ## CLUB PÀDEL NOVA
 ### Juga. Reserva. Gaudeix.

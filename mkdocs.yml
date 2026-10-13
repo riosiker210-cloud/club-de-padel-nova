@@ -1,7 +1,7 @@
 site_name: Documentació del Projecte
 
-theme:
-  name: material
+theme: dracula
+  name: dracula
 
 nav:
   - Inici: index.md

@@ -1,1 +1,1 @@
-![Sample chart](descargas/Fiesta.png)
+![Sample chart](img/Fiesta.jpeg)

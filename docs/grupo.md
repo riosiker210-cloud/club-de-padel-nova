@@ -1,0 +1,1 @@
+![Sample chart](img/Fiesta.png)

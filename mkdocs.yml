@@ -6,3 +6,4 @@ theme:
 nav:
   - Inici: index.md
   - Grup: grupo.md
+  - Exemples: Exemples.md

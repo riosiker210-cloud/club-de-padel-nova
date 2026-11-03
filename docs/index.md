@@ -32,3 +32,6 @@ Organitza el teu partit amb els teus amics i gaudeix d'una pista exclusiva duran
 # Necessites ajuda?
 
 El nostre xat d'ajuda està disponible per resoldre els teus dubtes sobre les reserves, els horaris i el funcionament de la web.
+
+
+servicios de nginx costruyendo en la carpeta nginx y dentro de la cartepa nginx entramos en dockerfile

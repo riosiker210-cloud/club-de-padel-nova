@@ -9,17 +9,17 @@
 </head>
 <body>
   <!-- TODO F1/F4: identitat, servei, horaris i condicions coherents amb config.js. -->
-  <header><h1>Club padel nova</h1><p>TODO: presentació del negoci.</p>
+  <header><h1>club Pàdel Nova</h1><p>TODO: presentació del negoci.</p>
     <nav><a href="#reserva">Reservar</a> · <a href="#assistent">Assistent</a> · <a href="/gestion/">Gestió</a></nav>
   </header>
   <main>
     <section id="reserva">
-      <h2>Reserva una taula</h2>
+      <h2>Reserva una pista</h2>
       <form id="booking-form">
         <label>Nom <input name="name" required minlength="2" maxlength="100"></label>
         <label>Data <input name="date" type="date" required></label>
         <label>Hora <select name="time" required disabled><option value="">Consulta una data</option></select></label>
-        <label>Comensals <input name="diners" type="number" min="1" max="8" required></label>
+        <label>Jugadors <input name="diners" type="number" min="1" max="8" required></label>
         <button type="submit">Reservar</button>
       </form>
       <p id="booking-status" role="status">TODO F4: connectar el formulari.</p>
@@ -33,7 +33,7 @@
       </form>
       <p id="chat-status" role="status"></p>
     </section>
-    <section><h2>Condicions</h2><p>TODO F1: una taula, durada, capacitat, dies i hores. Dades fictícies.</p></section>
+    <section><h2>Condicions</h2><p>TODO F1: una pista, durada, capacitat, dies i hores. Dades fictícies.</p></section>
   </main>
 </body>
 </html>

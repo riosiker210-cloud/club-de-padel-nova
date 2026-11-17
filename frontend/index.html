@@ -1,350 +1,1580 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import { z } from "zod";
-import hero from "@/assets/hero-court.jpg";
-import player from "@/assets/player.jpg";
-import lounge from "@/assets/lounge.jpg";
-import lockers from "@/assets/lockers.jpg";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Club Pàdel Nova. Pistas profesionales, clases, torneos y reservas online.">
+<title>Club Pàdel Nova — El pádel en otro nivel</title>
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Club Pàdel Nova — El pádel en otro nivel" },
-      { name: "description", content: "Pistas profesionales, clases, torneos y reservas online en Club Pàdel Nova." },
-      { property: "og:title", content: "Club Pàdel Nova — El pádel en otro nivel" },
-      { property: "og:description", content: "Pistas profesionales, clases, torneos y reservas online." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
-});
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-const NAV = [
-  ["inicio", "Inicio"], ["nosotros", "Club"], ["instalaciones", "Instalaciones"],
-  ["servicios", "Servicios"], ["reservas", "Reservas"], ["asistente", "Nova"], ["contacto", "Contacto"],
-] as const;
-
-function Logo() {
-  return (
-    <a href="#inicio" className="flex items-center gap-3">
-      <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary font-display text-lg text-primary-foreground shadow-glow">PN</span>
-      <span className="font-display text-xl tracking-wider">PÀDEL <span className="text-primary">NOVA</span></span>
-    </a>
-  );
+<style>
+:root {
+  --bg: #101510;
+  --card: #171e18;
+  --text: #f4f6f1;
+  --muted: #a8b0a7;
+  --green: #b8f34a;
+  --line: #303a30;
 }
 
-function Header() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const f = () => setScrolled(window.scrollY > 40);
-    f(); window.addEventListener("scroll", f); return () => window.removeEventListener("scroll", f);
-  }, []);
-  return (
-    <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "border-b border-border bg-background/80 py-3 backdrop-blur-xl" : "py-6"}`}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <Logo />
-        <nav className="hidden items-center gap-8 lg:flex">
-          {NAV.slice(1).map(([id, l]) => (
-            <a key={id} href={`#${id}`} className="text-sm font-semibold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary">{l}</a>
-          ))}
-          <a href="#reservas" className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-all hover:scale-105 hover:shadow-glow">Reservar</a>
-        </nav>
-        <button aria-label="Abrir menú" onClick={() => setOpen(!open)} className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-xl border border-border lg:hidden">
-          <span className={`h-0.5 w-5 bg-foreground transition ${open ? "translate-y-2 rotate-45" : ""}`} />
-          <span className={`h-0.5 w-5 bg-foreground transition ${open ? "opacity-0" : ""}`} />
-          <span className={`h-0.5 w-5 bg-foreground transition ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 85px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+.wrap {
+  width: min(1180px, calc(100% - 48px));
+  margin: auto;
+}
+
+.display {
+  font-family: "Barlow Condensed", sans-serif;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.accent {
+  color: var(--green);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 38px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* CABECERA */
+
+header {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  width: 100%;
+  padding: 22px 0;
+  transition: .3s;
+}
+
+header.scrolled {
+  padding: 12px 0;
+  background: #101510df;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "Barlow Condensed";
+  font-size: 23px;
+  letter-spacing: .08em;
+}
+
+.logo-mark {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: var(--green);
+  color: #101510;
+  border-radius: 11px;
+  font-weight: 900;
+}
+
+.logo b {
+  color: var(--green);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+nav a {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: .2s;
+}
+
+nav a:hover {
+  color: var(--green);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50px;
+  padding: 15px 25px;
+  background: var(--green);
+  color: #11170e;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px #b8f34a30;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid #899187;
+}
+
+.menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--line);
+  color: white;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 22px;
+}
+
+/* PORTADA */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(90deg, #101510f2, #101510a8 55%, #10151022),
+    linear-gradient(0deg, var(--bg), transparent 35%),
+    url("https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=2000&q=85")
+    center/cover;
+}
+
+.hero-content {
+  position: relative;
+  padding-top: 90px;
+}
+
+.hero h1 {
+  font-size: clamp(65px, 11vw, 145px);
+  line-height: .83;
+  margin: 0;
+}
+
+.hero p {
+  max-width: 570px;
+  color: #c0c8bd;
+  font-size: 18px;
+  line-height: 1.8;
+  margin: 28px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.scroll {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: .25em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* SECCIONES */
+
+section {
+  padding: 110px 0;
+}
+
+/* SOBRE NOSOTROS */
+
+.about {
+  background: #e8eee5;
+  color: #182018;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 85px;
+  align-items: center;
+}
+
+.photo-wrap {
+  position: relative;
+}
+
+.photo-wrap img {
+  width: 100%;
+  height: 570px;
+  object-fit: cover;
+  border-radius: 25px;
+}
+
+.photo-tag {
+  position: absolute;
+  right: -22px;
+  bottom: 24px;
+  background: var(--green);
+  padding: 20px 25px;
+  border-radius: 16px;
+  color: #14200f;
+}
+
+.photo-tag strong {
+  display: block;
+  font: 800 34px "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.about .eyebrow {
+  color: #4d7024;
+}
+
+.about h2 {
+  font-size: clamp(44px, 6vw, 72px);
+  line-height: .95;
+}
+
+.about p:not(.eyebrow) {
+  color: #647064;
+  font-size: 16px;
+  line-height: 1.85;
+  margin-top: 20px;
+}
+
+.values {
+  display: flex;
+  gap: 35px;
+  border-top: 1px solid #cbd4c8;
+  margin-top: 30px;
+  padding-top: 25px;
+  font-weight: 700;
+}
+
+.values span::before {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 4px;
+  background: #85bb2f;
+  margin-bottom: 12px;
+  border-radius: 5px;
+}
+
+/* TITULOS */
+
+.section-head {
+  margin-bottom: 48px;
+  max-width: 680px;
+}
+
+.section-head.center {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.section-head.center .eyebrow {
+  justify-content: center;
+}
+
+.section-head h2 {
+  font-size: clamp(46px, 6vw, 72px);
+  line-height: .95;
+}
+
+/* INSTALACIONES */
+
+.facility-grid,
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.facility {
+  height: 460px;
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+  background: #202820;
+}
+
+.facility img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .7s;
+}
+
+.facility:hover img {
+  transform: scale(1.08);
+}
+
+.facility::after {
+  content: "";
+  position: absolute;
+  inset: 25% 0 0;
+  background: linear-gradient(transparent, #101510);
+}
+
+.facility-info {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  padding: 28px;
+}
+
+.facility-info::before {
+  content: "";
+  display: block;
+  width: 38px;
+  height: 4px;
+  background: var(--green);
+  margin-bottom: 16px;
+}
+
+.facility h3,
+.service h3 {
+  font: 700 30px "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.facility p {
+  color: #c0c8bd;
+  line-height: 1.6;
+  margin-top: 10px;
+}
+
+/* SERVICIOS */
+
+.services {
+  background: var(--card);
+  border-block: 1px solid var(--line);
+}
+
+.service {
+  padding: 35px;
+  border: 1px solid var(--line);
+  border-radius: 23px;
+  background: var(--bg);
+  transition: .3s;
+}
+
+.service:hover {
+  transform: translateY(-7px);
+  border-color: #8fbf3c;
+  box-shadow: 0 15px 40px #0004;
+}
+
+.service-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 17px;
+  background: #b8f34a18;
+  color: var(--green);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+.service small {
+  color: var(--muted);
+  font-family: "Barlow Condensed";
+  font-size: 17px;
+}
+
+.service p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 15px;
+}
+
+/* RESERVAS */
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 75px;
+  align-items: center;
+}
+
+.booking-copy h2 {
+  font-size: clamp(52px, 7vw, 82px);
+  line-height: .9;
+}
+
+.booking-copy > p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-top: 25px;
+}
+
+.checklist {
+  list-style: none;
+  color: var(--muted);
+  line-height: 2.7;
+  margin-top: 20px;
+}
+
+.checklist li::before {
+  content: "✓";
+  display: inline-grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #111;
+  margin-right: 12px;
+}
+
+.booking-card {
+  padding: 38px;
+  border: 1px solid #789a4a66;
+  background: var(--card);
+  border-radius: 25px;
+  box-shadow: 0 20px 60px #0004;
+}
+
+.booking-card h3 {
+  font: 700 30px "Barlow Condensed";
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid #394439;
+  border-radius: 11px;
+  background: #111811;
+  color: white;
+  outline: none;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--green);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.error {
+  font-size: 12px;
+  color: #ff8c8c;
+  margin-top: 5px;
+}
+
+.success {
+  text-align: center;
+  padding: 28px 0;
+}
+
+.success .tick {
+  margin: auto;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--green);
+  color: #111;
+  font-size: 28px;
+}
+
+.success h3 {
+  margin: 18px 0 8px;
+}
+
+.success p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+/* ASISTENTE NOVA */
+
+.assistant-section {
+  background: var(--card);
+  border-top: 1px solid var(--line);
+}
+
+.chat {
+  max-width: 760px;
+  margin: auto;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: 0 20px 60px #0004;
+}
+
+.chat-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #111;
+  display: grid;
+  place-items: center;
+  font: 800 23px "Barlow Condensed";
+}
+
+.online {
+  color: var(--green);
+  font-size: 11px;
+}
+
+.chat-body {
+  height: 330px;
+  overflow-y: auto;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.bubble {
+  max-width: 82%;
+  padding: 12px 15px;
+  border-radius: 16px;
+  background: #252e25;
+  color: #e5eae2;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: var(--green);
+  color: #111;
+}
+
+.bubble.bot {
+  align-self: flex-start;
+}
+
+.quick {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 20px 15px;
+}
+
+.quick button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 30px;
+  padding: 8px 12px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.quick button:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.chat-form {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid var(--line);
+}
+
+.chat-form input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: var(--card);
+  color: white;
+  padding: 12px 17px;
+  outline: none;
+}
+
+.chat-form button {
+  width: 45px;
+  height: 45px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--green);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* CONTACTO */
+
+.contact {
+  text-align: center;
+  background:
+    linear-gradient(#101510dd, #101510f2),
+    url("https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=1800&q=80")
+    center/cover;
+}
+
+.contact h2 {
+  font-size: clamp(58px, 9vw, 110px);
+  line-height: .88;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.contact-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  max-width: 700px;
+  margin: 45px auto 0;
+}
+
+.contact-card {
+  padding: 25px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #171e18bb;
+}
+
+.contact-card strong {
+  color: var(--green);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.contact-card p {
+  margin-top: 12px;
+}
+
+/* PIE DE PÁGINA */
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 40px 0;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+footer nav {
+  gap: 18px;
+}
+
+footer nav a {
+  font-size: 11px;
+}
+
+footer > p {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 35px;
+}
+
+/* ANIMACIONES */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity .7s, transform .7s;
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* DISEÑO RESPONSIVE */
+
+@media(max-width:900px) {
+  header nav.desktop {
+    display: none;
+  }
+
+  .menu-btn {
+    display: block;
+  }
+
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 14px 24px 0;
+    padding: 14px;
+    background: #171e18f5;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+  }
+
+  .mobile-nav.show {
+    display: flex;
+  }
+
+  .mobile-nav a {
+    padding: 12px;
+  }
+
+  .about-grid,
+  .booking-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .facility-grid,
+  .service-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .facility:last-child {
+    grid-column: span 2;
+  }
+}
+
+@media(max-width:600px) {
+  .wrap {
+    width: calc(100% - 34px);
+  }
+
+  section {
+    padding: 78px 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(60px, 17vw, 92px);
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .facility-grid,
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .facility,
+  .facility:last-child {
+    grid-column: auto;
+    height: 390px;
+  }
+
+  .form-row,
+  .contact-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-card {
+    padding: 25px 20px;
+  }
+
+  .photo-wrap img {
+    height: 430px;
+  }
+
+  .values {
+    gap: 18px;
+    font-size: 13px;
+  }
+
+  .contact h2 {
+    font-size: 62px;
+  }
+
+  .footer-inner {
+    justify-content: center;
+    text-align: center;
+  }
+
+  footer nav {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- CABECERA -->
+<header id="header">
+  <div class="wrap header-inner">
+
+    <a class="logo" href="#inicio">
+      <span class="logo-mark">PN</span>
+      <span>PÀDEL <b>NOVA</b></span>
+    </a>
+
+    <nav class="desktop">
+      <a href="#nosotros">Club</a>
+      <a href="#instalaciones">Instalaciones</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#reservas">Reservas</a>
+      <a href="#asistente">Nova</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#reservas">Reservar</a>
+    </nav>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+  </div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="#nosotros">Club</a>
+    <a href="#instalaciones">Instalaciones</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#reservas">Reservas</a>
+    <a href="#asistente">Nova</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- INICIO -->
+<section class="hero" id="inicio">
+  <div class="wrap hero-content">
+
+    <p class="eyebrow">Club Pàdel Nova</p>
+
+    <h1 class="display">
+      El pádel<br>
+      en otro <span class="accent">nivel</span>
+    </h1>
+
+    <p>
+      Un club exclusivo donde la pasión por el deporte
+      se encuentra con instalaciones de primera.
+      Ven a jugar, entrenar y competir como nunca.
+    </p>
+
+    <div class="actions">
+      <a class="btn" href="#reservas">Reserva tu pista →</a>
+      <a class="btn ghost" href="#nosotros">Descubre el club</a>
+    </div>
+
+  </div>
+
+  <a class="scroll" href="#nosotros">Scroll ↓</a>
+</section>
+
+<!-- SOBRE NOSOTROS -->
+<section class="about" id="nosotros">
+  <div class="wrap about-grid">
+
+    <div class="photo-wrap reveal">
+      <img
+        src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1000&q=85"
+        alt="Jugador practicando pádel"
+        loading="lazy"
+      >
+
+      <div class="photo-tag">
+        <strong>Pasión</strong>
+        <span>por cada punto</span>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <p class="eyebrow">Sobre nosotros</p>
+
+      <h2 class="display">
+        Más que un club.
+        Una forma de vivir el pádel.
+      </h2>
+
+      <p>
+        En Pàdel Nova creemos que el pádel es mucho
+        más que un deporte: es comunidad, superación
+        y energía compartida.
+      </p>
+
+      <p>
+        Hemos creado un espacio pensado para jugadores
+        de todos los niveles, donde cada detalle está
+        cuidado para que solo te preocupes de disfrutar
+        del juego.
+      </p>
+
+      <div class="values">
+        <span>Comunidad</span>
+        <span>Calidad</span>
+        <span>Energía</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INSTALACIONES -->
+<section id="instalaciones">
+  <div class="wrap">
+
+    <div class="section-head reveal">
+      <p class="eyebrow">Instalaciones</p>
+      <h2 class="display">Diseñadas para rendir</h2>
+    </div>
+
+    <div class="facility-grid">
+
+      <article class="facility reveal">
+        <img
+          src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=900&q=85"
+          alt="Pista de pádel"
+          loading="lazy"
+        >
+
+        <div class="facility-info">
+          <h3>Pistas profesionales</h3>
+          <p>
+            Cristal panorámico, césped de competición
+            e iluminación de alto rendimiento.
+          </p>
+        </div>
+      </article>
+
+      <article class="facility reveal">
+        <img
+          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=85"
+          alt="Zona de descanso"
+          loading="lazy"
+        >
+
+        <div class="facility-info">
+          <h3>Zona de descanso</h3>
+          <p>
+            Un espacio confortable para relajarte
+            y compartir antes y después del partido.
+          </p>
+        </div>
+      </article>
+
+      <article class="facility reveal">
+        <img
+          src="https://images.unsplash.com/photo-1564540583246-934409427776?auto=format&fit=crop&w=900&q=85"
+          alt="Instalaciones modernas"
+          loading="lazy"
+        >
+
+        <div class="facility-info">
+          <h3>Vestuarios</h3>
+          <p>
+            Vestuarios modernos, amplios
+            y cuidados al detalle.
+          </p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
+  <div class="wrap">
+
+    <div class="section-head center reveal">
+      <p class="eyebrow">Servicios</p>
+      <h2 class="display">Todo para tu juego</h2>
+    </div>
+
+    <div class="service-grid">
+
+      <article class="service reveal">
+        <div class="service-icon">▦</div>
+        <small>01</small>
+        <h3>Alquiler de pistas</h3>
+        <p>
+          Reserva tu pista en segundos y juega
+          cuando quieras con tus amigos.
+        </p>
+      </article>
+
+      <article class="service reveal">
+        <div class="service-icon">♙</div>
+        <small>02</small>
+        <h3>Clases y entrenamientos</h3>
+        <p>
+          Entrenadores cualificados para todos
+          los niveles, de iniciación a competición.
+        </p>
+      </article>
+
+      <article class="service reveal">
+        <div class="service-icon">♜</div>
+        <small>03</small>
+        <h3>Torneos y eventos</h3>
+        <p>
+          Competiciones, ligas internas y eventos
+          para vivir el pádel al máximo.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- RESERVAS -->
+<section id="reservas">
+  <div class="wrap booking-grid">
+
+    <div class="booking-copy reveal">
+      <p class="eyebrow">Reservas</p>
+
+      <h2 class="display">
+        Tu pista te <span class="accent">espera</span>
+      </h2>
+
+      <p>
+        Elige el día y la hora. Consulta la disponibilidad
+        y prepárate para jugar.
+      </p>
+
+      <ul class="checklist">
+        <li>Proceso rápido y sencillo</li>
+        <li>Confirmación por correo</li>
+        <li>Horarios de mañana y tarde</li>
+      </ul>
+    </div>
+
+    <div class="booking-card reveal">
+
+      <form id="bookingForm" novalidate>
+        <h3>Reserva tu pista</h3>
+
+        <div class="field">
+          <label for="nombre">Nombre completo</label>
+          <input
+            id="nombre"
+            name="nombre"
+            placeholder="Tu nombre"
+            autocomplete="name"
+          >
+          <div class="error" id="nombreError"></div>
+        </div>
+
+        <div class="field">
+          <label for="email">Correo electrónico</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="tu@correo.com"
+            autocomplete="email"
+          >
+          <div class="error" id="emailError"></div>
+        </div>
+
+        <div class="form-row">
+
+          <div class="field">
+            <label for="fecha">Fecha de reserva</label>
+            <input id="fecha" name="fecha" type="date">
+            <div class="error" id="fechaError"></div>
+          </div>
+
+          <div class="field">
+            <label for="hora">Hora disponible</label>
+
+            <select id="hora" name="hora">
+              <option value="">Selecciona</option>
+              <option>09:00</option>
+              <option>10:30</option>
+              <option>12:00</option>
+              <option>13:30</option>
+              <option>17:00</option>
+              <option>18:30</option>
+              <option>20:00</option>
+              <option>21:30</option>
+            </select>
+
+            <div class="error" id="horaError"></div>
+          </div>
+
+        </div>
+
+        <button class="btn" type="submit" style="width:100%">
+          Consultar disponibilidad
+        </button>
+      </form>
+
+      <div class="success" id="bookingSuccess" hidden>
+        <div class="tick">✓</div>
+        <h3 class="display">¡Solicitud recibida!</h3>
+        <p id="successText"></p>
+        <button class="btn ghost" id="newBooking" type="button">
+          Nueva consulta
         </button>
       </div>
-      <div className={`overflow-hidden transition-all duration-500 lg:hidden ${open ? "max-h-[500px]" : "max-h-0"}`}>
-        <nav className="mx-6 mt-4 flex flex-col rounded-2xl border border-border bg-card/95 p-4 backdrop-blur-xl">
-          {NAV.slice(1).map(([id, l]) => (
-            <a key={id} href={`#${id}`} onClick={() => setOpen(false)} className="rounded-lg px-4 py-3 font-semibold uppercase tracking-widest hover:bg-muted hover:text-primary">{l}</a>
-          ))}
-        </nav>
+
+    </div>
+  </div>
+</section>
+
+<!-- ASISTENTE VIRTUAL -->
+<section class="assistant-section" id="asistente">
+  <div class="wrap">
+
+    <div class="section-head center reveal">
+      <p class="eyebrow">Asistente virtual</p>
+      <h2 class="display">Habla con Nova</h2>
+    </div>
+
+    <div class="chat reveal">
+
+      <div class="chat-head">
+        <div class="avatar">N</div>
+
+        <div>
+          <strong>Nova</strong>
+          <div class="online">● En línea</div>
+        </div>
       </div>
-    </header>
-  );
-}
 
-const btnPrimary = "inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 font-bold uppercase tracking-wider text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-glow active:scale-95";
-const btnGhost = "inline-flex items-center justify-center gap-2 rounded-full border border-foreground/30 px-8 py-4 font-bold uppercase tracking-wider backdrop-blur transition-all duration-300 hover:border-primary hover:text-primary active:scale-95";
+      <div class="chat-body" id="chatBody">
+        <div class="bubble bot">
+          ¡Hola! Soy Nova, la asistente virtual del club.
+          ¿En qué puedo ayudarte?
+        </div>
+      </div>
 
-function Eyebrow({ children }: { children: string }) {
-  return <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-primary"><span className="h-px w-10 bg-primary" />{children}</p>;
-}
+      <div class="quick">
+        <button type="button" data-message="Reservar pista">
+          Reservar pista
+        </button>
 
-function Hero() {
-  return (
-    <section id="inicio" className="relative flex min-h-screen items-center overflow-hidden">
-      <img src={hero} alt="Pista de pádel profesional iluminada" width={1920} height={1088} className="absolute inset-0 h-full w-full animate-kenburns object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/30 to-transparent" />
-      <div className="relative mx-auto w-full max-w-7xl px-6 pt-24">
-        <div className="animate-rise"><Eyebrow>Club Pàdel Nova</Eyebrow></div>
-        <h1 className="animate-rise font-display text-6xl uppercase leading-[0.9] sm:text-8xl lg:text-[9rem]" style={{ animationDelay: ".15s" }}>
-          El pádel<br />en otro <span className="text-primary">nivel</span>
-        </h1>
-        <p className="mt-8 max-w-xl animate-rise text-lg text-muted-foreground sm:text-xl" style={{ animationDelay: ".3s" }}>
-          Un club exclusivo donde la pasión por el deporte se encuentra con instalaciones de primera. Ven a jugar, entrenar y competir como nunca.
+        <button type="button" data-message="Clases">
+          Clases
+        </button>
+
+        <button type="button" data-message="Torneos">
+          Torneos
+        </button>
+      </div>
+
+      <form class="chat-form" id="chatForm">
+        <input
+          id="chatInput"
+          maxlength="300"
+          placeholder="Escribe tu consulta..."
+          aria-label="Escribe tu consulta"
+        >
+
+        <button aria-label="Enviar" type="submit">➤</button>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contact" id="contacto">
+  <div class="wrap">
+
+    <div class="reveal">
+      <p class="eyebrow" style="justify-content:center">
+        Contacto
+      </p>
+
+      <h2 class="display">
+        Nos vemos en <span class="accent">la pista</span>
+      </h2>
+    </div>
+
+    <div class="contact-cards reveal">
+
+      <div class="contact-card">
+        <strong>Ubicación</strong>
+        <p>Dirección del club disponible próximamente</p>
+      </div>
+
+      <div class="contact-card">
+        <strong>Horarios</strong>
+        <p>
+          Consulta los horarios disponibles
+          en el sistema de reservas
         </p>
-        <div className="mt-10 flex animate-rise flex-wrap gap-4" style={{ animationDelay: ".45s" }}>
-          <a href="#reservas" className={btnPrimary}>Reserva tu pista →</a>
-          <a href="#nosotros" className={btnGhost}>Descubre el club</a>
-        </div>
       </div>
-      <a href="#nosotros" aria-label="Bajar" className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.3em] text-muted-foreground hover:text-primary">Scroll ↓</a>
-    </section>
-  );
-}
 
-function About() {
-  return (
-    <section id="nosotros" className="bg-light py-28 text-light-foreground">
-      <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
-        <div className="reveal relative">
-          <img src={player} alt="Jugador de pádel rematando" loading="lazy" width={1024} height={1280} className="aspect-[4/5] w-full rounded-3xl object-cover shadow-deep" />
-          <div className="absolute -bottom-6 -right-4 rounded-2xl bg-primary px-6 py-5 text-primary-foreground shadow-glow sm:-right-8">
-            <p className="font-display text-3xl uppercase">Pasión</p>
-            <p className="text-sm font-semibold">por cada punto</p>
-          </div>
-        </div>
-        <div className="reveal">
-          <p className="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-light-muted"><span className="h-px w-10 bg-light-foreground" />Sobre nosotros</p>
-          <h2 className="font-display text-5xl uppercase leading-none sm:text-6xl">Más que un club. Una forma de vivir el pádel.</h2>
-          <p className="mt-8 text-lg text-light-muted">En Pàdel Nova creemos que el pádel es mucho más que un deporte: es comunidad, superación y energía compartida.</p>
-          <p className="mt-4 text-lg text-light-muted">Hemos creado un espacio pensado para jugadores de todos los niveles, donde cada detalle está cuidado para que solo te preocupes de disfrutar del juego.</p>
-          <div className="mt-10 grid grid-cols-3 gap-6 border-t border-light-foreground/15 pt-8">
-            {["Comunidad", "Calidad", "Energía"].map((t) => (
-              <div key={t}><span className="mb-2 block h-1 w-8 rounded bg-primary" /><p className="font-bold">{t}</p></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+    </div>
 
-function Facilities() {
-  const items = [
-    { img: hero, t: "Pistas profesionales", d: "Cristal panorámico, césped de competición e iluminación de alto rendimiento." },
-    { img: lounge, t: "Zona de descanso", d: "Un espacio confortable para relajarte y compartir antes y después del partido." },
-    { img: lockers, t: "Vestuarios", d: "Vestuarios modernos, amplios y cuidados al detalle." },
-  ];
-  return (
-    <section id="instalaciones" className="py-28">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="reveal mb-14 max-w-2xl"><Eyebrow>Instalaciones</Eyebrow><h2 className="font-display text-5xl uppercase leading-none sm:text-6xl">Diseñadas para rendir</h2></div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {items.map((i, n) => (
-            <article key={i.t} className="reveal group relative h-[480px] overflow-hidden rounded-3xl border border-border shadow-deep" style={{ transitionDelay: `${n * 0.1}s` }}>
-              <img src={i.img} alt={i.t} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-8">
-                <span className="mb-4 block h-1 w-10 rounded bg-primary transition-all duration-500 group-hover:w-20" />
-                <h3 className="font-display text-3xl uppercase">{i.t}</h3>
-                <p className="mt-3 max-h-0 overflow-hidden text-muted-foreground opacity-0 transition-all duration-500 group-hover:max-h-24 group-hover:opacity-100">{i.d}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+    <a class="btn" style="margin-top:40px" href="#reservas">
+      Reserva tu pista →
+    </a>
 
-const icons = {
-  court: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-7 w-7"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 12h18M12 4v16" /></svg>,
-  coach: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-7 w-7"><circle cx="12" cy="7" r="3.5" /><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5" /></svg>,
-  trophy: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-7 w-7"><path d="M8 4h8v5a4 4 0 0 1-8 0V4ZM8 6H4a3 3 0 0 0 4 4M16 6h4a3 3 0 0 1-4 4M12 13v4M8 21h8M9 17h6" /></svg>,
-};
+  </div>
+</section>
 
-function Services() {
-  const s = [
-    { i: icons.court, t: "Alquiler de pistas", d: "Reserva tu pista en segundos y juega cuando quieras con tus amigos." },
-    { i: icons.coach, t: "Clases y entrenamientos", d: "Entrenadores cualificados para todos los niveles, de iniciación a competición." },
-    { i: icons.trophy, t: "Torneos y eventos", d: "Competiciones, ligas internas y eventos para vivir el pádel al máximo." },
-  ];
-  return (
-    <section id="servicios" className="relative overflow-hidden border-y border-border bg-card py-28">
-      <div className="pointer-events-none absolute -right-40 -top-40 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="reveal mb-14 text-center"><div className="flex justify-center"><Eyebrow>Servicios</Eyebrow></div><h2 className="font-display text-5xl uppercase sm:text-6xl">Todo para tu juego</h2></div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {s.map((x, n) => (
-            <div key={x.t} className="reveal group rounded-3xl border border-border bg-background p-10 transition-all duration-500 hover:-translate-y-2 hover:border-primary/60 hover:shadow-glow" style={{ transitionDelay: `${n * 0.1}s` }}>
-              <div className="mb-8 grid h-16 w-16 place-items-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover:rotate-6 group-hover:bg-primary group-hover:text-primary-foreground">{x.i}</div>
-              <span className="font-display text-sm text-muted-foreground">0{n + 1}</span>
-              <h3 className="mt-2 font-display text-3xl uppercase">{x.t}</h3>
-              <p className="mt-4 text-muted-foreground">{x.d}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+</main>
 
-const HOURS = ["09:00", "10:30", "12:00", "13:30", "17:00", "18:30", "20:00", "21:30"];
-const schema = z.object({
-  nombre: z.string().trim().min(2, "Introduce tu nombre completo").max(100),
-  email: z.string().trim().email("Correo electrónico no válido").max(255),
-  fecha: z.string().min(1, "Selecciona una fecha"),
-  hora: z.string().min(1, "Selecciona una hora"),
+<!-- PIE DE PÁGINA -->
+<footer>
+  <div class="wrap footer-inner">
+
+    <a class="logo" href="#inicio">
+      <span class="logo-mark">PN</span>
+      <span>PÀDEL <b>NOVA</b></span>
+    </a>
+
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#nosotros">Club</a>
+      <a href="#instalaciones">Instalaciones</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#reservas">Reservas</a>
+      <a href="#asistente">Nova</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <a class="btn ghost" href="#inicio">
+      ↑ Volver arriba
+    </a>
+
+  </div>
+
+  <p>© 2026 Club Pàdel Nova. Todos los derechos reservados.</p>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+
+// MENÚ MÓVIL
+
+const header = document.getElementById("header");
+const menuBtn = document.getElementById("menuBtn");
+const mobileNav = document.getElementById("mobileNav");
+
+window.addEventListener("scroll", () => {
+  header.classList.toggle("scrolled", window.scrollY > 40);
 });
 
-function Booking() {
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "loading" | "ok">("idle");
-  const [data, setData] = useState<z.infer<typeof schema> | null>(null);
-  const today = new Date().toISOString().slice(0, 10);
-  const submit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const r = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
-    if (!r.success) { setErrors(Object.fromEntries(r.error.issues.map((i) => [i.path[0], i.message]))); return; }
-    if (r.data.fecha < today) { setErrors({ fecha: "La fecha no puede ser pasada" }); return; }
-    setErrors({}); setStatus("loading");
-    setTimeout(() => { setData(r.data); setStatus("ok"); e.currentTarget?.reset?.(); }, 900);
-  };
-  const field = "w-full rounded-xl border border-input bg-background/60 px-4 py-3.5 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30";
-  const err = (k: string) => errors[k] && <p className="mt-1.5 text-sm text-destructive">{errors[k]}</p>;
-  return (
-    <section id="reservas" className="relative py-28">
-      <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-[1fr_1.1fr]">
-        <div className="reveal">
-          <Eyebrow>Reservas</Eyebrow>
-          <h2 className="font-display text-5xl uppercase leading-none sm:text-7xl">Tu pista te <span className="text-primary">espera</span></h2>
-          <p className="mt-6 max-w-md text-lg text-muted-foreground">Elige el día y la hora. Consulta la disponibilidad y prepárate para jugar.</p>
-          <ul className="mt-8 space-y-3 text-muted-foreground">
-            {["Proceso rápido y sencillo", "Confirmación por correo", "Horarios de mañana y tarde"].map((t) => (
-              <li key={t} className="flex items-center gap-3"><span className="grid h-6 w-6 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">✓</span>{t}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="reveal relative rounded-3xl border border-primary/30 bg-card p-8 shadow-deep sm:p-10">
-          <div className="absolute inset-x-10 -top-px h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
-          {status === "ok" && data ? (
-            <div className="py-10 text-center">
-              <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-primary text-2xl text-primary-foreground shadow-glow">✓</div>
-              <h3 className="mt-6 font-display text-3xl uppercase">¡Solicitud recibida!</h3>
-              <p className="mt-3 text-muted-foreground">Gracias, {data.nombre}. Hemos registrado tu consulta para el {new Date(data.fecha).toLocaleDateString("es-ES")} a las {data.hora}. Te responderemos en {data.email}.</p>
-              <button onClick={() => setStatus("idle")} className={`${btnGhost} mt-8`}>Nueva consulta</button>
-            </div>
-          ) : (
-            <form onSubmit={submit} noValidate className="space-y-5">
-              <h3 className="font-display text-2xl uppercase">Reserva tu pista</h3>
-              <div><label className="mb-2 block text-sm font-semibold" htmlFor="nombre">Nombre completo</label><input id="nombre" name="nombre" className={field} placeholder="Tu nombre" />{err("nombre")}</div>
-              <div><label className="mb-2 block text-sm font-semibold" htmlFor="email">Correo electrónico</label><input id="email" name="email" type="email" className={field} placeholder="tu@correo.com" />{err("email")}</div>
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div><label className="mb-2 block text-sm font-semibold" htmlFor="fecha">Fecha de reserva</label><input id="fecha" name="fecha" type="date" min={today} className={`${field} [color-scheme:dark]`} />{err("fecha")}</div>
-                <div><label className="mb-2 block text-sm font-semibold" htmlFor="hora">Hora disponible</label>
-                  <select id="hora" name="hora" defaultValue="" className={field}><option value="" disabled>Selecciona</option>{HOURS.map((h) => <option key={h}>{h}</option>)}</select>{err("hora")}</div>
-              </div>
-              <button disabled={status === "loading"} className={`${btnPrimary} w-full disabled:opacity-70`}>{status === "loading" ? "Consultando…" : "Consultar disponibilidad"}</button>
-            </form>
-          )}
-        </div>
-      </div>
-    </section>
-  );
+menuBtn.addEventListener("click", () => {
+  const opened = mobileNav.classList.toggle("show");
+
+  menuBtn.setAttribute("aria-expanded", opened);
+  menuBtn.textContent = opened ? "×" : "☰";
+});
+
+mobileNav.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    mobileNav.classList.remove("show");
+    menuBtn.textContent = "☰";
+    menuBtn.setAttribute("aria-expanded", "false");
+  });
+});
+
+
+// ANIMACIONES AL BAJAR POR LA WEB
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("in");
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal").forEach(element => {
+  observer.observe(element);
+});
+
+
+// FORMULARIO DE RESERVAS
+
+const bookingForm = document.getElementById("bookingForm");
+
+const today = new Date();
+
+const todayString = new Date(
+  today.getTime() - today.getTimezoneOffset() * 60000
+).toISOString().slice(0, 10);
+
+document.getElementById("fecha").min = todayString;
+
+const errors = ["nombre", "email", "fecha", "hora"];
+
+function clearErrors() {
+  errors.forEach(key => {
+    document.getElementById(key + "Error").textContent = "";
+  });
 }
 
-type Msg = { from: "bot" | "user"; text: string };
-function reply(q: string) {
-  const t = q.toLowerCase();
-  if (/reserv|pista|hora/.test(t)) return "Puedes reservar desde la sección Reservas: elige fecha y hora y pulsa «Consultar disponibilidad». 🎾";
-  if (/clase|entren|aprender/.test(t)) return "Ofrecemos clases y entrenamientos para todos los niveles. Indícanos tu nivel en el formulario y te contactaremos.";
-  if (/torneo|evento|liga/.test(t)) return "Organizamos torneos y eventos durante todo el año. ¡Atento a nuestras próximas convocatorias!";
-  if (/vestuar|descanso|instala/.test(t)) return "Contamos con pistas profesionales, zona de descanso y vestuarios modernos.";
-  if (/hola|buenas/.test(t)) return "¡Hola! ¿En qué puedo ayudarte hoy?";
-  if (/precio|cuesta|tarifa/.test(t)) return "Para información sobre tarifas, consulta con el club a través del formulario de reservas.";
+bookingForm.addEventListener("submit", event => {
+
+  event.preventDefault();
+  clearErrors();
+
+  const nombre = document.getElementById("nombre").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const fecha = document.getElementById("fecha").value;
+  const hora = document.getElementById("hora").value;
+
+  let valid = true;
+
+  if (nombre.length < 2) {
+    document.getElementById("nombreError").textContent =
+      "Introduce tu nombre completo";
+    valid = false;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById("emailError").textContent =
+      "Correo electrónico no válido";
+    valid = false;
+  }
+
+  if (!fecha) {
+    document.getElementById("fechaError").textContent =
+      "Selecciona una fecha";
+    valid = false;
+  } else if (fecha < todayString) {
+    document.getElementById("fechaError").textContent =
+      "La fecha no puede ser pasada";
+    valid = false;
+  }
+
+  if (!hora) {
+    document.getElementById("horaError").textContent =
+      "Selecciona una hora";
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  const submit = bookingForm.querySelector("button[type='submit']");
+
+  submit.disabled = true;
+  submit.textContent = "Consultando...";
+
+  setTimeout(() => {
+
+    bookingForm.hidden = true;
+
+    document.getElementById("successText").textContent =
+      `Gracias, ${nombre}. Hemos registrado tu consulta para el ${
+        new Date(fecha + "T12:00:00").toLocaleDateString("es-ES")
+      } a las ${hora}. Esta demostración no envía un correo real.`;
+
+    document.getElementById("bookingSuccess").hidden = false;
+
+    submit.disabled = false;
+    submit.textContent = "Consultar disponibilidad";
+
+  }, 650);
+
+});
+
+
+// NUEVA RESERVA
+
+document.getElementById("newBooking").addEventListener("click", () => {
+
+  document.getElementById("bookingSuccess").hidden = true;
+
+  bookingForm.hidden = false;
+  bookingForm.reset();
+
+  clearErrors();
+
+});
+
+
+// RESPUESTAS DEL ASISTENTE NOVA
+
+const chatBody = document.getElementById("chatBody");
+const chatInput = document.getElementById("chatInput");
+
+function botReply(question) {
+
+  const t = question.toLowerCase();
+
+  if (/reserv|pista|hora/.test(t)) {
+    return "Puedes reservar desde la sección Reservas: elige fecha y hora y pulsa Consultar disponibilidad.";
+  }
+
+  if (/clase|entren|aprender/.test(t)) {
+    return "Ofrecemos clases y entrenamientos para todos los niveles. Indícanos tu nivel y te contactaremos.";
+  }
+
+  if (/torneo|evento|liga/.test(t)) {
+    return "Organizamos torneos y eventos durante todo el año. ¡Atento a nuestras próximas convocatorias!";
+  }
+
+  if (/vestuar|descanso|instala/.test(t)) {
+    return "Contamos con pistas profesionales, zona de descanso y vestuarios modernos.";
+  }
+
+  if (/hola|buenas/.test(t)) {
+    return "¡Hola! ¿En qué puedo ayudarte hoy?";
+  }
+
+  if (/precio|cuesta|tarifa/.test(t)) {
+    return "Para información sobre tarifas, consulta con el club a través del formulario de reservas.";
+  }
+
   return "Puedo ayudarte con reservas, clases, torneos e instalaciones. ¿Sobre qué quieres saber más?";
+
 }
 
-function Assistant() {
-  const [msgs, setMsgs] = useState<Msg[]>([{ from: "bot", text: "¡Hola! Soy Nova, la asistente virtual del club. ¿En qué puedo ayudarte?" }]);
-  const [typing, setTyping] = useState(false);
-  const [input, setInput] = useState("");
-  const box = useRef<HTMLDivElement>(null);
-  useEffect(() => { box.current?.scrollTo({ top: box.current.scrollHeight, behavior: "smooth" }); }, [msgs, typing]);
-  const send = (text: string) => {
-    const v = text.trim().slice(0, 300); if (!v) return;
-    setMsgs((m) => [...m, { from: "user", text: v }]); setInput(""); setTyping(true);
-    setTimeout(() => { setTyping(false); setMsgs((m) => [...m, { from: "bot", text: reply(v) }]); }, 800);
-  };
-  return (
-    <section id="asistente" className="border-t border-border bg-card py-28">
-      <div className="mx-auto max-w-3xl px-6">
-        <div className="reveal mb-12 text-center"><div className="flex justify-center"><Eyebrow>Asistente virtual</Eyebrow></div><h2 className="font-display text-5xl uppercase sm:text-6xl">Habla con Nova</h2></div>
-        <div className="reveal overflow-hidden rounded-3xl border border-border bg-background shadow-deep">
-          <div className="flex items-center gap-4 border-b border-border bg-muted/40 px-6 py-4">
-            <div className="relative grid h-11 w-11 place-items-center rounded-full bg-primary font-display text-primary-foreground">N<span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-primary" /></div>
-            <div><p className="font-bold">Nova</p><p className="flex items-center gap-2 text-xs text-primary"><span className="h-2 w-2 animate-pulse rounded-full bg-primary" />En línea</p></div>
-          </div>
-          <div ref={box} className="h-96 space-y-4 overflow-y-auto p-6">
-            {msgs.map((m, i) => (
-              <div key={i} className={`flex ${m.from === "user" ? "justify-end" : ""}`}>
-                <p className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${m.from === "user" ? "rounded-br-sm bg-primary text-primary-foreground" : "rounded-bl-sm bg-muted"}`}>{m.text}</p>
-              </div>
-            ))}
-            {typing && <div className="flex w-fit gap-1 rounded-2xl bg-muted px-4 py-4">{[0, 1, 2].map((d) => <span key={d} className="h-2 w-2 animate-blink rounded-full bg-muted-foreground" style={{ animationDelay: `${d * 0.2}s` }} />)}</div>}
-          </div>
-          <div className="flex flex-wrap gap-2 px-6 pb-3">
-            {["Reservar pista", "Clases", "Torneos"].map((s) => <button key={s} onClick={() => send(s)} className="rounded-full border border-border px-3 py-1.5 text-xs transition hover:border-primary hover:text-primary">{s}</button>)}
-          </div>
-          <form onSubmit={(e) => { e.preventDefault(); send(input); }} className="flex gap-3 border-t border-border p-4">
-            <input value={input} onChange={(e) => setInput(e.target.value)} maxLength={300} placeholder="Escribe tu consulta…" className="flex-1 rounded-full border border-input bg-card px-5 py-3 outline-none focus:border-primary" aria-label="Escribe tu consulta" />
-            <button aria-label="Enviar" className="grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground transition hover:shadow-glow active:scale-90">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5"><path d="M3 20.5 21 12 3 3.5v6.6l12 1.9-12 1.9z" /></svg>
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
-  );
+
+// AÑADIR MENSAJES AL CHAT
+
+function addMessage(text, type) {
+
+  const div = document.createElement("div");
+
+  div.className = "bubble " + type;
+  div.textContent = text;
+
+  chatBody.appendChild(div);
+
+  chatBody.scrollTop = chatBody.scrollHeight;
+
 }
 
-function Contact() {
-  return (
-    <section id="contacto" className="relative overflow-hidden py-32">
-      <img src={hero} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-30" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background" />
-      <div className="relative mx-auto max-w-7xl px-6 text-center">
-        <div className="reveal"><div className="flex justify-center"><Eyebrow>Contacto</Eyebrow></div>
-          <h2 className="font-display text-6xl uppercase leading-none sm:text-8xl">Nos vemos en <span className="text-primary">la pista</span></h2></div>
-        <div className="reveal mx-auto mt-14 grid max-w-3xl gap-6 sm:grid-cols-2">
-          <div className="rounded-3xl border border-border bg-card/70 p-8 backdrop-blur"><p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">Ubicación</p><p className="mt-3 text-lg">Dirección del club disponible próximamente</p></div>
-          <div className="rounded-3xl border border-border bg-card/70 p-8 backdrop-blur"><p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">Horarios</p><p className="mt-3 text-lg">Consulta los horarios disponibles en el sistema de reservas</p></div>
-        </div>
-        <a href="#reservas" className={`${btnPrimary} reveal mt-12`}>Reserva tu pista →</a>
-      </div>
-    </section>
-  );
+
+// ENVIAR MENSAJES
+
+function sendMessage(value) {
+
+  const message = value.trim().slice(0, 300);
+
+  if (!message) return;
+
+  addMessage(message, "user");
+
+  chatInput.value = "";
+
+  setTimeout(() => {
+    addMessage(botReply(message), "bot");
+  }, 450);
+
 }
 
-function Footer() {
-  return (
-    <footer className="border-t border-border py-12">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-6 md:flex-row">
-        <Logo />
-        <nav className="flex flex-wrap justify-center gap-6">{NAV.map(([id, l]) => <a key={id} href={`#${id}`} className="text-sm text-muted-foreground hover:text-primary">{l}</a>)}</nav>
-        <a href="#inicio" className="rounded-full border border-border px-4 py-2 text-sm transition hover:border-primary hover:text-primary">↑ Volver arriba</a>
-      </div>
-      <p className="mt-10 text-center text-xs text-muted-foreground">© 2026 Club Pàdel Nova. Todos los derechos reservados.</p>
-    </footer>
-  );
-}
 
-function Index() {
-  useEffect(() => {
-    const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: 0.12 });
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-  return (
-    <main>
-      <Header /><Hero /><About /><Facilities /><Services /><Booking /><Assistant /><Contact /><Footer />
-    </main>
-  );
-}
+// FORMULARIO DEL CHAT
+
+document.getElementById("chatForm").addEventListener("submit", event => {
+
+  event.preventDefault();
+
+  sendMessage(chatInput.value);
+
+});
+
+
+// BOTONES RÁPIDOS DEL CHAT
+
+document.querySelectorAll("[data-message]").forEach(button => {
+
+  button.addEventListener("click", () => {
+    sendMessage(button.dataset.message);
+  });
+
+});
+
+</script>
+
+</body>
+</html>

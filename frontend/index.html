@@ -1,39 +1,257 @@
-<!doctype html>
-<html lang="ca">
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ReservaFàcil · Esquelet</title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <script type="module" src="/js/app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Club Pàdel Nova. Instalaciones, servicios y reservas de pádel.">
+    <title>Club Pàdel Nova | Pádel de alto nivel</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <!-- TODO F1/F4: identitat, servei, horaris i condicions coherents amb config.js. -->
-  <header><h1>club Pàdel Nova</h1><p>TODO: presentació del negoci.</p>
-    <nav><a href="#reserva">Reservar</a> · <a href="#assistent">Assistent</a> · <a href="/gestion/">Gestió</a></nav>
-  </header>
-  <main>
-    <section id="reserva">
-      <h2>Reserva una pista</h2>
-      <form id="booking-form">
-        <label>Nom <input name="name" required minlength="2" maxlength="100"></label>
-        <label>Data <input name="date" type="date" required></label>
-        <label>Hora <select name="time" required disabled><option value="">Consulta una data</option></select></label>
-        <label>Jugadors <input name="diners" type="number" min="1" max="8" required></label>
-        <button type="submit">Reservar</button>
-      </form>
-      <p id="booking-status" role="status">TODO F4: connectar el formulari.</p>
-    </section>
-    <section id="assistent">
-      <h2>Assistent</h2>
-      <div id="messages" role="log" aria-live="polite"><p>TODO F5: missatge de benvinguda.</p></div>
-      <form id="chat-form">
-        <label>Missatge <input name="message" maxlength="500" required></label>
-        <button type="submit">Enviar</button>
-      </form>
-      <p id="chat-status" role="status"></p>
-    </section>
-    <section><h2>Condicions</h2><p>TODO F1: una pista, durada, capacitat, dies i hores. Dades fictícies.</p></section>
-  </main>
+
+    <header class="site-header">
+        <div class="container header-content">
+            <a href="#inicio" class="brand">
+                <span class="brand-mark">PN</span>
+                <span class="brand-name">PÀDEL <strong>NOVA</strong></span>
+            </a>
+
+            <nav class="main-nav">
+                <a href="#inicio" class="nav-link active">Inicio</a>
+                <a href="#club" class="nav-link">El club</a>
+                <a href="#instalaciones" class="nav-link">Instalaciones</a>
+                <a href="#servicios" class="nav-link">Servicios</a>
+                <a href="#reservas" class="nav-link">Reservas</a>
+                <a href="#contacto" class="nav-link">Contacto</a>
+            </nav>
+
+            <a href="#reservas" class="header-button">Reservar pista</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="inicio">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <p class="eyebrow">CLUB DEPORTIVO · DESDE 2018</p>
+                <h1>EL PÁDEL<br><span>EN OTRO NIVEL.</span></h1>
+                <p class="hero-description">
+                    Un espacio diseñado para disfrutar del deporte,
+                    mejorar tu juego y formar parte de una comunidad.
+                </p>
+                <div class="hero-actions">
+                    <a href="#reservas" class="button button-primary">Reserva tu pista</a>
+                    <a href="#club" class="button button-outline">Descubre el club</a>
+                </div>
+                <div class="hero-caption">DEPORTE · COMUNIDAD · EXCELENCIA</div>
+            </div>
+        </section>
+
+        <section class="intro-section section-padding" id="club">
+            <div class="container intro-grid">
+                <div>
+                    <p class="eyebrow">SOBRE NOSOTROS</p>
+                    <h2>Más que un club.<br><span>Una forma de vivir el pádel.</span></h2>
+                </div>
+                <div class="intro-copy">
+                    <p>
+                        En Club Pàdel Nova entendemos el pádel como una experiencia
+                        que va mucho más allá de la competición. Trabajamos para
+                        ofrecer un entorno deportivo moderno, accesible y de calidad.
+                    </p>
+                    <p>
+                        Nuestro objetivo es que cada jugador encuentre su espacio,
+                        independientemente de su nivel o experiencia.
+                    </p>
+                    <a href="#instalaciones" class="text-link">Conoce nuestras instalaciones <span>→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="facilities-section section-padding" id="instalaciones">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">NUESTRAS INSTALACIONES</p>
+                        <h2>Diseñadas para <span>jugar mejor.</span></h2>
+                    </div>
+                    <p class="section-description">
+                        Espacios preparados para ofrecer comodidad, rendimiento
+                        y una experiencia deportiva completa.
+                    </p>
+                </div>
+
+                <div class="facility-grid">
+                    <article class="facility-card facility-main">
+                        <div class="facility-number">01</div>
+                        <div>
+                            <h3>Pistas profesionales</h3>
+                            <p>Espacios de juego preparados para entrenamientos y partidos.</p>
+                        </div>
+                    </article>
+
+                    <article class="facility-card">
+                        <div class="facility-number">02</div>
+                        <div>
+                            <h3>Zona de descanso</h3>
+                            <p>Un lugar para relajarte antes y después de cada partido.</p>
+                        </div>
+                    </article>
+
+                    <article class="facility-card">
+                        <div class="facility-number">03</div>
+                        <div>
+                            <h3>Vestuarios</h3>
+                            <p>Comodidad y servicios para completar tu experiencia.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="services-section section-padding" id="servicios">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">QUÉ OFRECEMOS</p>
+                        <h2>Servicios pensados <span>para ti.</span></h2>
+                    </div>
+                </div>
+
+                <div class="services-grid">
+                    <article class="service-card">
+                        <span class="service-index">01 / JUEGO</span>
+                        <h3>Alquiler de pistas</h3>
+                        <p>Reserva una pista y disfruta de tu partido con amigos o compañeros.</p>
+                    </article>
+
+                    <article class="service-card">
+                        <span class="service-index">02 / FORMACIÓN</span>
+                        <h3>Clases y entrenamientos</h3>
+                        <p>Mejora tu técnica y desarrolla tu juego con sesiones adaptadas.</p>
+                    </article>
+
+                    <article class="service-card">
+                        <span class="service-index">03 / COMUNIDAD</span>
+                        <h3>Torneos y eventos</h3>
+                        <p>Participa en actividades deportivas y conoce a otros jugadores.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="booking-section section-padding" id="reservas">
+            <div class="container booking-grid">
+                <div class="booking-info">
+                    <p class="eyebrow">RESERVA ONLINE</p>
+                    <h2>Tu próximo partido<br><span>empieza aquí.</span></h2>
+                    <p>
+                        Consulta la disponibilidad y solicita tu reserva.
+                        Nuestro sistema te ayudará a organizar tu próximo partido.
+                    </p>
+                    <div class="booking-note">
+                        <span class="note-line"></span>
+                        <span>Reserva de forma sencilla y rápida.</span>
+                    </div>
+                </div>
+
+                <form class="booking-form" id="booking-form">
+                    <h3>Solicitar una reserva</h3>
+
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="nombre@ejemplo.com" required>
+
+                    <label for="fecha">Fecha</label>
+                    <input type="date" id="fecha" name="fecha" required>
+
+                    <label for="hora">Hora</label>
+                    <select id="hora" name="hora" required>
+                        <option value="">Selecciona una hora</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:30">17:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="20:30">20:30</option>
+                    </select>
+
+                    <button type="submit" class="button button-primary form-button">
+                        Consultar disponibilidad
+                    </button>
+                    <p class="form-message" id="booking-message"></p>
+                </form>
+            </div>
+        </section>
+
+        <section class="assistant-section section-padding">
+            <div class="container assistant-grid">
+                <div>
+                    <p class="eyebrow">ATENCIÓN AL JUGADOR</p>
+                    <h2>Estamos aquí<br><span>para ayudarte.</span></h2>
+                    <p>
+                        Si tienes dudas sobre el club, las reservas o nuestros servicios,
+                        puedes consultar con nuestro asistente.
+                    </p>
+                </div>
+
+                <div class="chat-panel">
+                    <div class="chat-header">
+                        <div class="status-dot"></div>
+                        <div>
+                            <strong>Asistente Nova</strong>
+                            <span>Atención al cliente</span>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="chat-bubble">
+                            Bienvenido a Club Pàdel Nova. ¿En qué podemos ayudarte?
+                        </div>
+                    </div>
+                    <form class="chat-form" id="chat-form">
+                        <input type="text" id="chat-input" placeholder="Escribe tu consulta..." required>
+                        <button type="submit" aria-label="Enviar mensaje">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section section-padding" id="contacto">
+            <div class="container contact-content">
+                <div>
+                    <p class="eyebrow">CONTACTO</p>
+                    <h2>Nos vemos<br><span>en la pista.</span></h2>
+                </div>
+                <div class="contact-details">
+                    <div>
+                        <span class="contact-label">UBICACIÓN</span>
+                        <p>Consulta nuestra ubicación y cómo llegar al club.</p>
+                    </div>
+                    <div>
+                        <span class="contact-label">HORARIO</span>
+                        <p>Contacta con nosotros para consultar los horarios disponibles.</p>
+                    </div>
+                    <a href="#reservas" class="button button-primary">Reserva ahora</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <a href="#inicio" class="brand footer-brand">
+                <span class="brand-mark">PN</span>
+                <span class="brand-name">PÀDEL <strong>NOVA</strong></span>
+            </a>
+            <p>© 2026 Club Pàdel Nova. Todos los derechos reservados.</p>
+            <a href="#inicio" class="back-top">Volver arriba ↑</a>
+        </div>
+    </footer>
+
+    <script src="/js/app.js" defer></script>
 </body>
 </html>
